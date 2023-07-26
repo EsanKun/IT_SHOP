@@ -1,0 +1,45 @@
+<div class="container my-5">
+  <h1 class="mb-3">เพิ่มพนักงาน</h1>
+  
+  <form #form="ngForm" (ngSubmit)="addEmployee()">
+
+    <div class="form-group">
+      <label for="name">ชื่อ-นามสกุลพนักงาน</label>
+      <input type="text" class="form-control" id="name" name="name" placeholder="ชื่อ-นามสกุล" [(ngModel)] = "addEmployeeRequest.name">
+    </div>
+
+    <div class="form-group">
+      <label for="telPhone">เบอร์โทรศัพท์</label>
+      <input type="text" class="form-control" id="telPhone" name="telPhone" [(ngModel)] = "addEmployeeRequest.telPhone">
+    </div>
+
+    <div class="form-group">
+      <label for="email1">อีเมล</label>
+      <input type="text" class="form-control" id="email1" name="email" [(ngModel)] = "addEmployeeRequest.email">
+    </div>
+
+    <div class="form-group">
+      <label for="address">ที่อยู่</label>
+      <input type="text" class="form-control" id="address" name="address" [(ngModel)] = "addEmployeeRequest.address">
+    </div>
+
+    <div class="form-group">
+      <label for="role">ตำแหน่งงาน</label>
+      <p-dropdown class="form-control" [options]="emp_role" name="role" [(ngModel)] = "selectedRole" optionValue="define" optionLabel="define" (onChange)="roleSelected()"></p-dropdown>
+    </div>
+
+    <div class="form-group">
+      <label for="userName">username</label>
+      <input type="text" class="form-control" id="username" name="username" [(ngModel)] = "addEmployeeRequest.userName">
+    </div>
+
+    <div class="form-group">
+      <label for="password">password</label>
+      <input type="text" class="form-control" id="password" name="password" [(ngModel)] = "addEmployeeRequest.password">
+    </div>
+
+    <br>
+    <button  type="submit" class="btn btn-primary">บันทึก</button>
+  </form>
+
+</div>

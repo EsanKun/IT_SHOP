@@ -1,0 +1,101 @@
+
+<p-panel>
+  <ng-template pTemplate="header">
+    <div class="flex">
+      <button pButton label="เพิ่มสินค้า" class="p-button-outlined" icon="pi pi-plus-circle"></button>
+      <p-dropdown [options]="set_status" name="status" [(ngModel)] = "selectedStatus" optionValue="status" optionLabel="status" (onChange)="statusSelected()"></p-dropdown>
+      <span class="p-input-icon-left ml-auto">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" placeholder="Search keyword" 
+              [(ngModel)]="searchInput"
+              #in_Search 
+              (input)="inputSearch(searchInput)"/>
+      </span>
+    </div>
+    </ng-template>
+
+    <p-table
+    #dt1
+    [value]="mixProducts"
+    dataKey="id"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    selectionMode="single"
+    [paginator]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+>
+    <ng-template pTemplate="header">
+      <tr>
+          <th pSortableColumn="code" style="width:10%">รหัส <p-sortIcon field="code"></p-sortIcon></th>
+          <th pSortableColumn="category" style="width:10%">ยี่ห้อ <p-sortIcon field="category"></p-sortIcon></th>
+          <th pSortableColumn="category" style="width:10%">รุ่น <p-sortIcon field="category"></p-sortIcon></th>
+          <th pSortableColumn="category" style="width:10%">ประเภท <p-sortIcon field="category"></p-sortIcon></th>
+          <th pSortableColumn="category" style="width:5%">จำนวน <p-sortIcon field="category"></p-sortIcon></th>
+          <th pSortableColumn="category" style="width:5%">ราคารวม <p-sortIcon field="category"></p-sortIcon></th>
+          <th pSortableColumn="category" style="width:5%">ส่วนลด <p-sortIcon field="category"></p-sortIcon></th>
+          <th pSortableColumn="category" style="width:5%">สถานะ <p-sortIcon field="category"></p-sortIcon></th>
+          <th style="width:10%">รูปภาพ</th>
+          <th style="width:20%">Action</th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-product let-i ="rowIndex" >
+      <tr (click)="showDetail(product.id)">
+          <td>{{product.id}}</td>
+          <td>{{product.brand}}</td>
+          <td>{{product.gen}}</td>
+          <td>{{product.type}}</td>
+          <td>{{product.amount}}</td>
+          <td>{{product.price}}</td>
+          <td>{{product.discount}}</td>
+          <td>{{product.status}}</td>
+          <td><img src="{{product.image}}" alt="product.Pid" width="100" class="shadow-4" /></td>
+          <td *ngIf="product.status == 'รอการอนุมัติ'">
+            <div>
+              <p-button (onClick)="approval(product.id, $event)" styleClass="p-button-rounded p-button-success" 
+              icon="pi pi-thumbs-up-fill" label="อนุมัติ"></p-button>
+              <p-button (onClick)="disapproval(product.id, product.pid, $event)" styleClass="p-button-rounded p-button-danger" 
+              icon="pi pi-times" label="ไม่อนุมัติ"></p-button>
+            </div>
+          </td>
+      </tr>
+  </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="7">No customers found.</td>
+        </tr>
+    </ng-template>
+</p-table>
+
+</p-panel>
+
+<p-dialog header="รายละเอียดสินค้า" [(visible)]="visible" [style]="{width: '50vw'}">
+  <ng-template pTemplate>
+    <div class="col flex align-items-center justify-content-center" [hidden]="!display">
+      <div class="container">
+        <div class="container">
+          <h3 class="name-label">{{mixProduct.brand}}</h3>
+          <h5 class="name-label">{{mixProduct.gen}}</h5>
+          <img src="{{mixProduct.image}}" alt="mixProduct.Id" width="250" class="shadow-4" />
+          <span>รายละเอียดสินค้า : {{mixProduct.description}}</span>
+          
+          <div>
+            <div class="product-price">
+              <span class="span-price">ราคา </span>
+              <strong class="strong-price">{{price_discount}}</strong>
+              <span class="span-price"> บาท</span>
+            </div>
+            <div class="product-price">
+              <span class="discount">{{mixProduct.price}}</span>
+              <span class="discount">-{{mixProduct.discount}}%</span>
+            </div>
+          </div>
+
+          <span>จำนวนสินค้า : {{mixProduct.amount}}</span>
+        </div>
+      </div>
+      
+    </div>
+  </ng-template>
+</p-dialog>

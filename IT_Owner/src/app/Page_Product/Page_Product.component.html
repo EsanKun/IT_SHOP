@@ -1,0 +1,71 @@
+<p-panel>
+    <ng-template pTemplate="header"> 
+        <span class="text-primary font-semibold text-xl">
+            <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" placeholder="Search keyword" #in_Search (input)="inputSearch(in_Search.value)"/>
+            </span>
+        </span>
+        <p-dropdown [options]="product_type" name="type" [(ngModel)] = "selectedType" optionValue="type" optionLabel="type" (onChange)="typeSelected()"></p-dropdown>
+        <div class="btn_Go_Right">
+            <button pButton class="p-button-outlined" icon="pi pi-plus-circle">
+                <a routerLink="add">เพิ่มสินค้า</a>
+            </button>
+        </div>
+    </ng-template>
+  
+<p-table
+    #dt1
+    [value]="products"
+    dataKey="id"
+    [rows]="5"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[5, 10, 15]"
+    [paginator]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+>
+    <ng-template pTemplate="header">
+      <tr>
+          <th pSortableColumn="code" style="width:5%">รหัสสินค้า <p-sortIcon field="code"></p-sortIcon></th>
+          <th pSortableColumn="name" style="width:5%">ยี่ห้อ <p-sortIcon field="name"></p-sortIcon></th>
+          <th pSortableColumn="category" style="width:5%">รุ่น <p-sortIcon field="category"></p-sortIcon></th>
+          <th pSortableColumn="category" style="width:5%">ประเภท <p-sortIcon field="category"></p-sortIcon></th>
+          <th pSortableColumn="quantity" style="width:60%">รายละเอียด <p-sortIcon field="quantity"></p-sortIcon></th>
+          <th pSortableColumn="price" style="width:5%">ราคา <p-sortIcon field="price"></p-sortIcon></th>
+          <th pSortableColumn="price" style="width:5%">จำนวนคงเหลือ <p-sortIcon field="price"></p-sortIcon></th>
+          <th style="width:5%">รูปสินค้า</th>
+          <th style="width:5%">Action</th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-product let-i ="rowIndex">
+      <tr>
+          <td>{{product.pid}}</td>
+          <td>{{product.brand}}</td>
+          <td>{{product.gen}}</td>
+          <td>{{product.type}}</td>
+          <td>{{product.description}}</td>
+          <td>{{product.price}}</td>
+          <td>{{product.amount}}</td>
+          <td><img src="{{product.image}}" alt="product.Pid" width="100" class="shadow-4" /></td>
+          <td>
+            <div>
+                <p-button styleClass="p-button-rounded" (onClick)="edit(product.pid)">
+                    แก้ไข
+                </p-button>
+                <p-button (onClick)="deleteProduct(product.pid)" styleClass="p-button-rounded">ลบ</p-button>
+            </div>
+          </td>
+
+      </tr>
+  </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="7">No customers found.</td>
+        </tr>
+    </ng-template>
+</p-table>
+
+
+  <ng-template pTemplate="footer"> Footer content here </ng-template>
+</p-panel>

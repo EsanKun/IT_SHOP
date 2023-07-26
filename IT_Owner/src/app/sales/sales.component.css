@@ -1,0 +1,42 @@
+.centerScreen {
+    position: absolute;
+    top: 2%;
+    left: 15%;
+    margin-left: 0px;
+    font-family: 'Prompt', sans-serif;
+  }
+
+  .spt-appetizer {
+    position: relative;
+    left: 1%;
+    right: 5%;
+
+  }
+
+  .fimg {
+    width: 45%;
+  }
+
+  :host>>>.mystyle {
+    /*background: url("https://img-cdn-china-admissions.imgix.net/wp-content/uploads/2020/10/rent-apartment-hong-kong-china.jpg?auto=format%2Cenhance%2Ccompress") no-repeat center;*/
+    background-size: cover;
+    @import url('https://fonts.googleapis.com/css2?family=Prompt:ital,wght@1,100&display=swap');
+    background-color: rgba(255, 255, 255, 0.274);
+    font-size: 16px;
+    font-family: 'Prompt', sans-serif;
+  }
+
+  :host>>>.changeHead {
+    position: absolute;
+  }
+
+  :host>>>.Go_Right {
+    position: absolute;
+    right: 10%;
+  }
+
+  :host>>>.btn_Go_Right {
+    position: absolute;
+    right: 5%;
+    size: 50%;
+  }

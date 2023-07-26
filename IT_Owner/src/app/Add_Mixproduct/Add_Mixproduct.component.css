@@ -1,0 +1,85 @@
+.row-input{
+    display: contents;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.column{
+    display: flex;
+    flex-direction: column;
+}
+
+.container-row {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+
+.container-column {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.column-input{
+    display: flex;
+    flex-direction: column;
+    /* padding: 10px; */
+}
+
+.Go_Right {
+    position: sticky;
+    left: 50%;
+    size: 50%;
+    padding-left: 10px;
+}
+
+.price_Right {
+    position: sticky;
+    left: 50%;
+    size: 100%;
+    margin-top: 25px;
+    padding-left: 10px;
+}
+
+.input-product{
+    width: 140%;
+}
+
+.input-product-price{
+    width: 60%;
+}
+
+.input-product_img{
+    width: 48.5%;
+}
+
+.input-product_desc{
+    width: 48.5%;
+}
+
+.pi{
+    color: greenyellow;
+}
+
+input:read-only{
+    background-color: rgb(236, 236, 236);
+}
+
+pInputText:read-only{
+    background-color: rgb(236, 236, 236);
+}
+
+p-card{
+    width: 40%;
+}
+
+.img-panel {
+    /* width: 200px;
+    height: 300px; */
+    object-fit: cover;
+}

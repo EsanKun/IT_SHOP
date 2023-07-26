@@ -1,0 +1,135 @@
+<p-panel>
+  <ng-template pTemplate="header">
+    <div class="flex">
+      <span class="p-input-icon-left ml-auto">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" placeholder="Search keyword" 
+                [(ngModel)]="searchInput"
+                #in_Search 
+                (input)="inputSearch(searchInput)"/>
+      </span>
+    </div>
+    <div style="padding-left: 10px;">
+      <p-dropdown [options]="product_type" name="type" [(ngModel)] = "selectedType" 
+      optionValue="type" optionLabel="type" (onChange)="typeSelected()"></p-dropdown>
+    </div>
+        <div class="btn_Go_Right">
+          <p-button label="ขายสินค้า" icon="pi pi-shopping-cart" styleClass="p-button-success" (onClick)="showBasket()"></p-button>
+        </div>
+  </ng-template>
+
+  <!-- <div class="container">
+    <div class="row">
+      <ng-container *ngFor="let product of Products">
+        <div class="card col-md-3" (click)="showDetail(product.pid)">
+          <img src="{{product.image}}" alt="">
+          <h5>
+            {{product.brand}} : <h6>{{product.gen}}</h6>
+          </h5>
+          <button class="btn btn-outline-dark btn-block mt-4 w-100">เพิ่มลงตะกร้า</button>
+        </div>
+      </ng-container>
+      
+    </div>
+  </div> -->
+
+  <div class="container">
+    <div class="row">
+      <ng-container *ngFor="let product of Products">
+        <div class="card col-md-3" (click)="showDetail(product.pid)">
+          <img src="{{product.image}}" alt="">
+          <div class="card-content">
+            <h5 class="text-desc">
+              {{product.brand}}
+            </h5>
+            <p class="text-desc">{{product.type}}</p>
+            <p class="text-desc">{{product.gen}}</p>
+            <p><strong>ราคา: </strong> {{product.price}} บาท</p>
+            <button class="btn btn-outline-dark btn-block mt-4" (click)="addToBasket(product.pid, $event)" type="button">เพิ่มลงตะกร้า</button>
+            <!-- <p-button (onClick)="disapproval(product.id, product.pid, $event)" styleClass="p-button-rounded p-button-danger" 
+              icon="pi pi-times" label="ไม่อนุมัติ"></p-button> -->
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  
+
+</p-panel>
+
+<p-dialog header="รายละเอียดสินค้า" [(visible)]="visible" [style]="{width: '50vw'}">
+  <ng-template pTemplate>
+    <div class="col flex align-items-center justify-content-center" [hidden]="!display">
+      <div class="container">
+        <div class="container">
+          <h3 class="name-label">{{productRequest.brand}}</h3>
+          <h5 class="name-label">{{productRequest.gen}}</h5>
+          <img src="{{productRequest.image}}" alt="mixProduct.Id" width="250" class="shadow-4" />
+          <h6>รายละเอียดสินค้า : {{productRequest.description}}</h6>
+          
+          <div>
+            <div class="product-price">
+              <span class="span-price">ราคา </span>
+              <strong class="strong-price">{{productRequest.price}}</strong>
+              <span class="span-price"> บาท</span>
+            </div>
+          </div>
+
+          <span>จำนวนสินค้า : {{productRequest.amount}}</span>
+        </div>
+      </div>
+      
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="ตะกร้าสินค้า" [(visible)]="visible2" [style]="{width: '50vw'}">
+  <ng-template pTemplate>
+    <div class="col flex align-items-center justify-content-center">
+      <p-table [value]="Basket" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:5%">รหัสสินค้า</th>
+            <th>ราคา</th>
+            <th>จำนวนที่ซื้อ</th>
+            <th>จัดการ</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-pro let-i="rowIndex">
+          <tr>
+            <td>{{pro.pid}}</td>
+            <td>{{pro.price}}</td>
+            <td>
+              <div class="column-input">
+                <span>จำนวนสินค้า (สูงสุด : {{pro.amount}} ชิ้น)</span>
+                <p-inputNumber [(ngModel)]="Sale[i].amount" mode="decimal" [showButtons]="true" inputId="minmax-buttons"
+                  [min]="1" [max]="pro.amount"> </p-inputNumber>
+              </div>
+            </td>
+            <td>
+              <div>
+                <p-button (onClick)="deleteMixProduct(i, pro.pid)" styleClass="p-button-rounded">ลบ</p-button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+        
+          <div class="telPhone-input">
+            <span class="p-float-label">
+              <input pInputText id="telPhone" [(ngModel)]="telPhone" />
+              <label htmlFor="telPhone">เบอร์โทรลูกค้า</label>
+          </span>
+          </div>
+
+          <tr>
+            <td colspan="2" class="text-right"> </td>
+            <td>ยืนยันการจัดชุด </td>
+            <td><button type="button" pButton pRipple (click)="sell()" label="เพิ่ม" class="p-button-rounded">เพิ่ม</button></td>
+          </tr>
+        </ng-template>
+      </p-table>
+      
+    </div>
+  </ng-template>
+</p-dialog>

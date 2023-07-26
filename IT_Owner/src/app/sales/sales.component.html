@@ -1,0 +1,87 @@
+
+
+<p-panel>
+  <ng-template pTemplate="header"> 
+    <div class="flex">
+      <button pButton label="เพิ่มสินค้า" class="p-button-outlined" icon="pi pi-plus-circle"></button>
+      <span class="p-input-icon-left ml-auto">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" placeholder="Search keyword" #in_Search
+          (click)="inputSearch(in_Search.value)" />
+      </span>
+    </div>
+</ng-template>
+  
+<p-splitter [style]="{'height': '600px'}" styleClass="mb-5">
+
+  <ng-template pTemplate>
+    <p-table #dt1 [value]="sales" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[10, 25, 50]" [paginator]="true" selectionMode="single"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']">
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="code" style="width:10%">รหัสการขาย </th>
+          <th pSortableColumn="category" style="width:10%">เบอร์โทรศัพท์ลูกค้า</th>
+              <th pSortableColumn="category" style="width:10%">ประเภทลูกค้า</th>
+          <th pSortableColumn="quantity" style="width:10%">วันที่ </th>
+          <th pSortableColumn="price" style="width:10%">จำนวนรวม </th>
+          <th pSortableColumn="price" style="width:10%">ราคารวม </th>
+          <!-- <th style="width:10%">Action</th> -->
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-sale let-i="rowIndex">
+        <tr (click)="show_salesDetail(sale.sid)">
+          <td>{{sale.sid}}</td>
+          <td>{{sale.customerTelPhone}}</td>
+          <td>{{sale.customerType}}</td>
+          <td>{{sale.saleDate}}</td>
+          <td>{{sale.totalAmount}}</td>
+          <td>{{sale.totalPrice}}</td>
+          <!-- <td>
+            <div>
+              <p-button styleClass="p-button-rounded">แก้ไข</p-button>
+              <p-button (onClick)="remove(i)" styleClass="p-button-rounded">ลบ</p-button>
+            </div>
+          </td> -->
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7">No customers found.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ng-template>
+  <ng-template pTemplate>
+    <div class="col flex align-items-center justify-content-center">
+      <p-table [value]="salesDetail" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>สินค้า</th>
+            <th>ราคารวม</th>
+            <th>จำนวนรวม</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-saleDetail>
+          <tr>
+            <td>{{saleDetail.proudctId}}</td>
+            <td>{{saleDetail.eachAmount}}</td>
+            <td>{{saleDetail.totalPrice}}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <tr>
+            <td colspan="2" class="text-right"> </td>
+            <td>ราคารวม</td>
+            <td></td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </ng-template>
+</p-splitter>
+
+</p-panel>
+

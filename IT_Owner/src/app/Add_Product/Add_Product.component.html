@@ -1,0 +1,45 @@
+<div class="container my-5">
+  <h1 class="mb-3">เพิ่มพนักงาน</h1>
+  
+  <form #form="ngForm" (ngSubmit)="addProduct()">
+
+    <div class="form-group">
+      <label for="brand">ยี่ห้อ</label>
+      <input type="text" class="form-control" id="brand" name="brand" [(ngModel)] = "addProductRequest.brand">
+    </div>
+
+    <div class="form-group">
+      <label for="gen">รุ่นของสินค้า</label>
+      <input type="text" class="form-control" id="gen" name="gen" [(ngModel)] = "addProductRequest.gen">
+    </div>
+
+    <div class="form-group">
+      <label for="type">ประเภทสินค้า</label>
+      <p-dropdown class="form-control" [options]="product_type" name="type" [(ngModel)] = "selectedType" optionValue="type" optionLabel="type" (onChange)="typeSelected()"></p-dropdown>
+    </div>
+
+    <div class="form-group">
+      <label for="price">ราคาสินค้า</label>
+      <input type="number" class="form-control" id="price" name="price" [(ngModel)] = "addProductRequest.price">
+    </div>
+
+    <div class="form-group">
+      <label for="amount">จำนวนคงเหลือ</label>
+      <input type="number" class="form-control" id="amount" name="amount" [(ngModel)] = "addProductRequest.amount">
+    </div>
+
+    <div class="form-group">
+      <label for="description">รายละเอียดสินค้า</label>
+      <input type="text" class="form-control" id="description" name="description" [(ngModel)] = "addProductRequest.description">
+    </div>
+
+    <div class="form-group">
+      <label for="image">รูปสินค้า</label>
+      <input type="text" class="form-control" id="image" name="image" [(ngModel)] = "addProductRequest.image">
+    </div>
+    
+    <br>
+    <button  type="submit" class="btn btn-primary">บันทึก</button>
+  </form>
+
+</div>

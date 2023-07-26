@@ -1,0 +1,73 @@
+<p-panel>
+  <ng-template pTemplate="header"> 
+    <span class="text-primary font-semibold text-xl">
+        <span class="p-input-icon-left ml-auto">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" placeholder="Search keyword" 
+            [(ngModel)]="searchInput"
+            #in_Search 
+            (input)="inputSearch(searchInput)"/>
+        </span>
+    </span>
+    <div class="btn_Go_Right">
+        <button pButton class="p-button-outlined" icon="pi pi-plus-circle">
+            <a routerLink="add">เพิ่มพนักงาน</a>
+        </button>
+    </div>
+</ng-template>
+  
+<p-table
+    #dt1
+    [value]="employees"
+    dataKey="id"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [paginator]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+>
+    <ng-template pTemplate="header">
+      <tr>
+          <th pSortableColumn="eid" style="width:15%">รหัสลูกค้า <p-sortIcon field="eid"></p-sortIcon></th>
+          <th pSortableColumn="name" style="width:5%">ชื่อ <p-sortIcon field="name"></p-sortIcon></th>
+          <th pSortableColumn="telPhone" style="width:5%">เบอร์โทรศัพท์ <p-sortIcon field="telPhone"></p-sortIcon></th>
+          <th pSortableColumn="email" style="width:5%">อีเมล <p-sortIcon field="email"></p-sortIcon></th>
+          <th pSortableColumn="address" style="width:10%">ที่อยู่ <p-sortIcon field="address"></p-sortIcon></th>
+          <th pSortableColumn="role" style="width:5%">ตำแหน่ง <p-sortIcon field="role"></p-sortIcon></th>
+          <th pSortableColumn="username" style="width:5%">Username<p-sortIcon field="username"></p-sortIcon></th>
+          <th pSortableColumn="password" style="width:5%">password <p-sortIcon field="password"></p-sortIcon></th>
+          <th style="width:10%">Action</th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-employee let-i ="rowIndex">
+      <tr>
+          <td>{{employee.eid}}</td>
+          <td>{{employee.name}}</td>
+          <td>{{employee.telPhone}}</td>
+          <td>{{employee.email}}</td>
+          <td>{{employee.address}}</td>
+          <td>{{employee.role}}</td>
+          <td>{{employee.userName}}</td>
+          <td>{{employee.password}}</td>
+          <td>
+            <div>
+                <p-button styleClass="p-button-rounded" (onClick)="edit(employee.eid)">
+                    แก้ไข
+                </p-button>
+                <p-button (onClick)="deleteEmployee(employee.eid)" styleClass="p-button-rounded">ลบ</p-button>
+            </div>
+          </td>
+
+      </tr>
+  </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="7">No customers found.</td>
+        </tr>
+    </ng-template>
+</p-table>
+
+
+  <ng-template pTemplate="footer"> Footer content here </ng-template>
+</p-panel>

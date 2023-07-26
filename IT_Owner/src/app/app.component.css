@@ -1,0 +1,51 @@
+.shopping-cart-container{
+    position: relative;
+}
+
+.notification {
+    background-color: red;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    color: white;
+    text-align: center;
+    padding-top: 0rem;
+    position: absolute;
+    top: -0.3em;
+    left: 1.1em;
+}
+
+.on-approval{
+    padding-right: 50px;
+}
+
+.clickAble{
+    cursor: pointer;
+}
+
+.nav-item,
+.navbar-brand{
+    font-weight: bold;
+    font-family: 'Prompt', sans-serif;
+}
+
+.nav-link:hover{
+    
+}
+
+.app-navbar{
+    position: sticky;
+    display: block;
+}
+
+.fixed{
+    position: fixed;
+    width: 100%;
+    transition: 0.2s linear;
+    top: 0px;
+}
+.nofixed{
+    position: static;
+    transition: 0.2s linear;
+    top: -50px;
+}

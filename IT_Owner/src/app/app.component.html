@@ -1,0 +1,48 @@
+<!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark " (scroll)="onScroll()" [ngClass]="navbarfixed?'fixed' : 'nofixed'">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Owner</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="employee">พนักงาน</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="customer">ลูกค้า</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="product">สินค้า</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="approve">อนุมัติสินค้า</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="sales">การขาย</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="mixProduct">จัดชุดสินค้า</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="login">Login</a>
+        </li>
+
+      </ul>
+
+      <div class="on-approval">
+        <div class="shopping-cart-container" [class.clickAble]="value > 0">
+          <i class="pi pi-shopping-cart" style="font-size: 2rem"></i>
+          <div *ngIf="value > 0" class="notification">{{value}}</div>
+        </div>
+      </div>
+
+      <button class="btn btn-outline-danger" type="button" (click)="logout()">Logout</button>
+    </div>
+  </div>
+</nav> -->
+
+<router-outlet></router-outlet>

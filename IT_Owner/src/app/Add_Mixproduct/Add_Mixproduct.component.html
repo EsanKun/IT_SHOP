@@ -1,0 +1,218 @@
+<p-panel>
+  <ng-template pTemplate="header">
+    <div class="flex">
+      <button pButton label="เพิ่มสินค้า" class="p-button-outlined" icon="pi pi-plus-circle"></button>
+      <span class="p-input-icon-left ml-auto">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" placeholder="Search keyword" #in_Search (click)="inputSearch(in_Search.value)" />
+      </span>
+    </div>
+  </ng-template>
+
+  <p-splitter [style]="{'height': '700px'}" styleClass="mb-5">
+
+    <ng-template pTemplate>
+
+      <p-table #dt1 [value]="products" dataKey="id" [rows]="5" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[5, 10, 15]" [paginator]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']">
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="code" style="width:5%">รหัสสินค้า <p-sortIcon field="code"></p-sortIcon></th>
+            <th pSortableColumn="name" style="width:5%">ยี่ห้อ <p-sortIcon field="name"></p-sortIcon></th>
+            <th pSortableColumn="category" style="width:5%">รุ่น <p-sortIcon field="category"></p-sortIcon></th>
+            <th pSortableColumn="category" style="width:5%">ประเภท <p-sortIcon field="category"></p-sortIcon></th>
+            <th pSortableColumn="price" style="width:5%">ราคา <p-sortIcon field="price"></p-sortIcon></th>
+            <th pSortableColumn="price" style="width:5%">จำนวนคงเหลือ <p-sortIcon field="price"></p-sortIcon></th>
+            <th style="width:5%">รูปสินค้า</th>
+            <th style="width:5%">Action</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product let-i="rowIndex">
+          <tr>
+            <td>{{product.pid}}</td>
+            <td>{{product.brand}}</td>
+            <td>{{product.gen}}</td>
+            <td>{{product.type}}</td>
+            <td>{{product.price}}</td>
+            <td>{{product.amount}}</td>
+            <td><img src="{{product.image}}" alt="product.Pid" width="80" class="shadow-4" /></td>
+            <td>
+              <div>
+                <p-button (onClick)="addToMixProduct(product.pid)" styleClass="p-button-rounded">เพิ่ม</p-button>
+              </div>
+            </td>
+
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7">No customers found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+    </ng-template>
+
+
+    <ng-template pTemplate>
+      <div class="col flex align-items-center justify-content-center">
+        <p-table [value]="store_mixProduct" responsiveLayout="scroll">
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width:5%">รหัสสินค้า</th>
+              <th>ราคา</th>
+              <th>จำนวนคงเหลือ</th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-pro let-i="rowIndex">
+            <tr>
+              <td>{{pro.pid}}</td>
+              <td>{{pro.price}}</td>
+              <td>{{pro.amount}}</td>
+              <td>
+                <div>
+                  <p-button (onClick)="deleteMixProduct(i, pro.pid)" styleClass="p-button-rounded">ลบ</p-button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="footer">
+            <!-- <tr>
+              <td colspan="2" class="text-right"> </td>
+              <td>จำนวนที่จัดชุดได้</td>
+              <td>{{maxAmount}}</td>
+            </tr>
+            <div *ngIf="count_check_array == 2">
+              <p-inputNumber [(ngModel)]="mpAmount" mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="1" [max]="maxAmount"> </p-inputNumber>
+            </div> -->
+            <!-- <div *ngIf="count_check_array >= 2">
+              <div class="column-input">
+                <span>จำนวนสินค้า (สูงสุด : {{maxAmount}} ชิ้น)</span>
+                <p-inputNumber [(ngModel)]="mpAmount" mode="decimal" [showButtons]="true" inputId="minmax-buttons"
+                  [min]="1" [max]="maxAmount"> </p-inputNumber>
+              </div>
+              <div class="column-input">
+                <span>ส่วนลด (สูงสุด : 95 เปอร์เซ็นต์)</span>
+                <p-inputNumber [(ngModel)]="discount" mode="decimal" [showButtons]="true" inputId="minmax-buttons"
+                  [min]="5" [max]="95"> </p-inputNumber>
+              </div>
+            </div> -->
+
+            <tr *ngIf="count_check_array >= 2">
+              <td colspan="2" class="text-right"> </td>
+              <!-- <td>
+                  <button type="button" pButton pRipple (click)="showSuccess()" label="เพิ่ม" class="p-button-rounded">เพิ่ม</button>
+                </td> -->
+              <td>ยืนยันการจัดชุด</td>
+              <td>
+                <!-- <p-button (onClick)="addMixProduct()" styleClass="p-button-rounded">ยืนยัน</p-button> -->
+
+                <p-button (click)="showDialog()" icon="pi pi-external-link" label="เพิ่มข้อมูล"></p-button>
+                <p-dialog header="ข้อมูลชุดสินค้า" [(visible)]="visible" [style]="{width: '50vw'}">
+
+                  <div class="container-column">
+
+                    <div class="container-row">
+
+                      <div>
+                        <span class="p-input-icon-left">
+                          <i class="pi pi-users"></i>
+                          <input class="input-product" type="text" pInputText [(ngModel)]="brand"
+                            placeholder="ยี่ห้อสินค้า" />
+                        </span>
+                      </div>
+
+                      <div class="Go_Right">
+                        <span class="p-input-icon-left">
+                          <i class="pi pi-search"></i>
+                          <input class="input-product" type="text" pInputText [(ngModel)]="gen"
+                            placeholder="รุ่นสินค้า" />
+                        </span>
+                      </div>
+
+                    </div>
+
+                    <div class="container-row">
+
+                      <div>
+                        <span class="p-input-icon-left">
+                          <i class="pi pi-users"></i>
+                          <input readonly class="input-product" type="text" pInputText [(ngModel)]="type"
+                            placeholder="ประเภทสินค้า" />
+                        </span>
+                      </div>
+
+                      <div class="Go_Right">
+                        <span class="p-input-icon-left">
+                          <i class="pi pi-search"></i>
+                          <input readonly class="input-product" type="text" pInputText [(ngModel)]="status"
+                            placeholder="สถานะ" />
+                        </span>
+                      </div>
+
+                    </div>
+
+                      <div class="container-column">
+                        <div>
+                          <span class="p-input-icon-left">
+                            <i class="pi pi-image"></i>
+                            <input class="input-product" type="text" pInputText [(ngModel)]="image"
+                              placeholder="รูปภาพ" />
+                          </span>
+                        </div>
+                        <label for="description">รายละเอียดสินค้า</label>
+                        <textarea rows="3" cols="30" pInputTextarea [(ngModel)]="description"></textarea>
+                      </div>
+
+                      <div class="container-row">
+
+                        <div class="column-input">
+                          <span>จำนวนสินค้า (สูงสุด : {{maxAmount}} ชิ้น)</span>
+                          <p-inputNumber [(ngModel)]="mpAmount" mode="decimal" [showButtons]="true" inputId="minmax-buttons"
+                              [min]="1" [max]="maxAmount"> </p-inputNumber>
+                        </div>
+                        <div class="price_Right">
+                          <span class="p-input-icon-left">
+                            <i class="pi pi-dollar"></i>
+                            <input readonly class="input-product-price" type="text" pInputText [(ngModel)]="totalPrice"
+                              placeholder="ราคารวม" />
+                          </span>
+                        </div>
+                        <div class="price_Right">
+                          <span class="p-input-icon-left">
+                            <i class="pi pi-dollar"></i>
+                            <input readonly class="input-product-price" type="text" pInputText [(ngModel)]="totalPrice"
+                              placeholder="ราคารวม" />
+                          </span>
+                        </div>
+                      </div>
+                    <div class="container-row">
+                      <div class="column-input">
+                        <span>ส่วนลด (สูงสุด : 95 เปอร์เซ็นต์)</span>
+                        <p-inputNumber [(ngModel)]="discount" mode="decimal" [showButtons]="true" inputId="minmax-buttons"
+                          [min]="5" [max]="95"> </p-inputNumber>
+                      </div>
+                      <div class="price_Right">
+                        <p-button (click)="addMixProduct()" icon="pi pi-cart-plus" label="สร้างชุดสินค้า"></p-button>
+                        <!-- <p-button (onClick)="addMixProduct()" styleClass="p-button-rounded">ยืนยัน</p-button> -->
+                      </div>
+                    </div>
+
+                  </div>
+
+
+                </p-dialog>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+      </div>
+    </ng-template>
+
+  </p-splitter>
+
+</p-panel>

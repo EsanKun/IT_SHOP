@@ -1,0 +1,50 @@
+<div class="container my-5">
+    <h1 class="mb-3">แก้ไขพนักงาน</h1>
+    
+    <form #form="ngForm" (ngSubmit)="updateEmployee()">
+
+        <div class="form-group">
+            <label for="eid">ID</label>
+            <input readonly type="text" class="form-control" id="eid" name="eid" [(ngModel)] = "editEmployeeRequest.eid">
+        </div>
+
+      <div class="form-group">
+        <label for="name">ชื่อ-นามสกุลพนักงาน</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="ชื่อ-นามสกุล" [(ngModel)] = "editEmployeeRequest.name">
+      </div>
+  
+      <div class="form-group">
+        <label for="telPhone">เบอร์โทรศัพท์</label>
+        <input type="text" class="form-control" id="telPhone" name="telPhone" [(ngModel)] = "editEmployeeRequest.telPhone">
+      </div>
+  
+      <div class="form-group">
+        <label for="email1">อีเมล</label>
+        <input type="text" class="form-control" id="email1" name="email" [(ngModel)] = "editEmployeeRequest.email">
+      </div>
+  
+      <div class="form-group">
+        <label for="address">ที่อยู่</label>
+        <input type="text" class="form-control" id="address" name="address" [(ngModel)] = "editEmployeeRequest.address">
+      </div>
+  
+      <div class="form-group">
+        <label for="role">ตำแหน่งงาน</label>
+        <p-dropdown class="form-control" [options]="emp_role" name="role" [(ngModel)] = "selectedRole" optionValue="define" optionLabel="define" (onChange)="roleSelected()"></p-dropdown>
+      </div>
+
+      <div class="form-group">
+        <label for="userName">username</label>
+        <input type="text" class="form-control" id="username" name="username" [(ngModel)] = "editEmployeeRequest.userName">
+      </div>
+  
+      <div class="form-group">
+        <label for="password">password</label>
+        <input type="text" class="form-control" id="password" name="password" [(ngModel)] = "editEmployeeRequest.password">
+      </div>
+
+      <br>
+      <button  type="submit" class="btn btn-primary">แก้ไข</button>
+    </form>
+  
+  </div>
