@@ -6,10 +6,14 @@
                 <input pInputText type="text" placeholder="Search keyword" #in_Search (input)="inputSearch(in_Search.value)"/>
             </span>
         </span>
-        <p-dropdown [options]="product_type" name="type" [(ngModel)] = "selectedType" optionValue="type" optionLabel="type" (onChange)="typeSelected()"></p-dropdown>
+        
+        <div style="padding-left: 10px;">
+            <p-dropdown [options]="product_type" name="type" [(ngModel)] = "selectedType" optionValue="type" optionLabel="type" (onChange)="typeSelected()"></p-dropdown>
+        </div>
+        
         <div class="btn_Go_Right">
-            <button pButton class="p-button-outlined" icon="pi pi-plus-circle">
-                <a routerLink="add">เพิ่มสินค้า</a>
+            <button pButton class="p-button-raised p-button-success" icon="pi pi-plus-circle" label="เพิ่มสินค้า" (onClick)="show_addProduct_Display()" (click)="show_addProduct_Display()">
+                <!-- <a routerLink="add">เพิ่มสินค้า</a> -->
             </button>
         </div>
     </ng-template>
@@ -27,15 +31,15 @@
 >
     <ng-template pTemplate="header">
       <tr>
-          <th pSortableColumn="code" style="width:5%">รหัสสินค้า <p-sortIcon field="code"></p-sortIcon></th>
-          <th pSortableColumn="name" style="width:5%">ยี่ห้อ <p-sortIcon field="name"></p-sortIcon></th>
-          <th pSortableColumn="category" style="width:5%">รุ่น <p-sortIcon field="category"></p-sortIcon></th>
-          <th pSortableColumn="category" style="width:5%">ประเภท <p-sortIcon field="category"></p-sortIcon></th>
-          <th pSortableColumn="quantity" style="width:60%">รายละเอียด <p-sortIcon field="quantity"></p-sortIcon></th>
+          <th pSortableColumn="pid" style="width:5%">รหัสสินค้า <p-sortIcon field="code"></p-sortIcon></th>
+          <th pSortableColumn="brand" style="width:5%">ยี่ห้อ <p-sortIcon field="name"></p-sortIcon></th>
+          <th pSortableColumn="gen" style="width:5%">รุ่น <p-sortIcon field="category"></p-sortIcon></th>
+          <th pSortableColumn="type" style="width:5%">ประเภท <p-sortIcon field="category"></p-sortIcon></th>
+          <th pSortableColumn="description" style="width:15%">รายละเอียด <p-sortIcon field="quantity"></p-sortIcon></th>
           <th pSortableColumn="price" style="width:5%">ราคา <p-sortIcon field="price"></p-sortIcon></th>
-          <th pSortableColumn="price" style="width:5%">จำนวนคงเหลือ <p-sortIcon field="price"></p-sortIcon></th>
-          <th style="width:5%">รูปสินค้า</th>
-          <th style="width:5%">Action</th>
+          <th pSortableColumn="amount" style="width:5%">จำนวนคงเหลือ <p-sortIcon field="price"></p-sortIcon></th>
+          <th style="width:15%">รูปสินค้า</th>
+          <th style="width:10%">Action</th>
       </tr>
   </ng-template>
   <ng-template pTemplate="body" let-product let-i ="rowIndex">
@@ -47,13 +51,12 @@
           <td>{{product.description}}</td>
           <td>{{product.price}}</td>
           <td>{{product.amount}}</td>
-          <td><img src="{{product.image}}" alt="product.Pid" width="100" class="shadow-4" /></td>
+          <td><img src="{{product.image}}" alt="product.Pid" width="200" class="shadow-4" /></td>
           <td>
             <div>
-                <p-button styleClass="p-button-rounded" (onClick)="edit(product.pid)">
-                    แก้ไข
-                </p-button>
-                <p-button (onClick)="deleteProduct(product.pid)" styleClass="p-button-rounded">ลบ</p-button>
+                <!-- <p-button styleClass="p-button-raised" (onClick)="edit(product.pid)" label="แก้ไข"></p-button> -->
+                <p-button styleClass="p-button-raised" (onClick)="show_editProduct_Display(product.pid)" label="แก้ไข"></p-button>
+                <p-button (onClick)="deleteProduct(product.pid)" styleClass="p-button-raised p-button-danger" label="ลบ"></p-button>
             </div>
           </td>
 
@@ -69,3 +72,106 @@
 
   <ng-template pTemplate="footer"> Footer content here </ng-template>
 </p-panel>
+
+<p-dialog header="เพิ่มสินค้า" [(visible)]="addProduct_display" [style]="{width: '50vw'}">
+
+    <div class="container my-5">
+        
+        <form #form="ngForm" (ngSubmit)="addProduct()">
+      
+          <div class="form-group">
+            <label for="brand">ยี่ห้อ</label>
+            <input type="text" class="form-control" id="brand" name="brand" [(ngModel)] = "addProductRequest.brand">
+          </div>
+      
+          <div class="form-group">
+            <label for="gen">รุ่นของสินค้า</label>
+            <input type="text" class="form-control" id="gen" name="gen" [(ngModel)] = "addProductRequest.gen">
+          </div>
+      
+          <div class="form-group">
+            <label for="type">ประเภทสินค้า</label>
+            <p-dropdown class="form-control" [options]="edit_add_product_type" name="type" [(ngModel)] = "edit_add_selectedType" optionValue="type" optionLabel="type" (onChange)="edit_o_add_typeSelected(1)"></p-dropdown>
+          </div>
+      
+          <div class="form-group">
+            <label for="price">ราคาสินค้า</label>
+            <input type="number" class="form-control" id="price" name="price" [(ngModel)] = "addProductRequest.price">
+          </div>
+      
+          <div class="form-group">
+            <label for="amount">จำนวนคงเหลือ</label>
+            <input type="number" class="form-control" id="amount" name="amount" [(ngModel)] = "addProductRequest.amount">
+          </div>
+      
+          <div class="form-group">
+            <label for="description">รายละเอียดสินค้า</label>
+            <input type="text" class="form-control" id="description" name="description" [(ngModel)] = "addProductRequest.description">
+          </div>
+      
+          <div class="form-group">
+            <label for="image">รูปสินค้า</label>
+            <input type="text" class="form-control" id="image" name="image" [(ngModel)] = "addProductRequest.image">
+          </div>
+          
+          <br>
+          <button  type="submit" class="btn btn-primary">บันทึก</button>
+        </form>
+      
+      </div>
+    
+  </p-dialog>
+
+  <p-dialog header="เแก้ไขข้อมูลสินค้า" [(visible)]="editProduct_display" [style]="{width: '50vw'}">
+
+    <div class="container my-5">
+        
+        <form #form="ngForm" (ngSubmit)="updateProduct()">
+      
+          <div class="form-group">
+            <label for="pid">รหัสสินค้า</label>
+            <input readonly ="text" class="form-control" id="pid" name="pid" [(ngModel)] = "editProductRequest.pid">
+          </div>
+      
+          <div class="form-group">
+            <label for="brand">ยี่ห้อ</label>
+            <input type="text" class="form-control" id="brand" name="brand" [(ngModel)] = "editProductRequest.brand">
+          </div>
+      
+          <div class="form-group">
+            <label for="gen">รุ่นของสินค้า</label>
+            <input type="text" class="form-control" id="gen" name="gen" [(ngModel)] = "editProductRequest.gen">
+          </div>
+      
+          <div class="form-group">
+            <label for="type">ประเภทสินค้า</label>
+            <p-dropdown class="form-control" [options]="edit_add_product_type" name="type" [(ngModel)] = "edit_add_selectedType" optionValue="type" optionLabel="type" (onChange)="edit_o_add_typeSelected(2)"></p-dropdown>
+          </div>
+      
+          <div class="form-group">
+            <label for="price">ราคาสินค้า</label>
+            <input type="number" class="form-control" id="price" name="price" [(ngModel)] = "editProductRequest.price">
+          </div>
+      
+          <div class="form-group">
+            <label for="amount">จำนวนคงเหลือ</label>
+            <input type="number" class="form-control" id="amount" name="amount" [(ngModel)] = "editProductRequest.amount">
+          </div>
+      
+          <div class="form-group">
+            <label for="description">รายละเอียดสินค้า</label>
+            <input type="text" class="form-control" id="description" name="description" [(ngModel)] = "editProductRequest.description">
+          </div>
+      
+          <div class="form-group">
+            <label for="image">รูปสินค้า</label>
+            <input type="text" class="form-control" id="image" name="image" [(ngModel)] = "editProductRequest.image">
+          </div>
+          
+          <br>
+          <button  type="submit" class="btn btn-primary">บันทึก</button>
+        </form>
+      
+      </div>
+    
+  </p-dialog>

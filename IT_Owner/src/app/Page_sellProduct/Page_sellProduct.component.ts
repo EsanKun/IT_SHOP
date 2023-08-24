@@ -8,6 +8,7 @@ import { Employee } from '../model/employee';
 import { Customer } from '../model/customer';
 import { Sales } from '../model/Sales';
 import { SalesDetail } from '../model/SalesDetail';
+import { Message } from 'primeng/api';
 
 @Component({
   selector: 'app-Page_sellProduct',
@@ -44,8 +45,8 @@ export class Page_sellProductComponent implements OnInit {
 
   detailRequest:SalesDetail={
     sDid : '',
-    salesId:'',
-    productId:'',
+    saleId:'',
+    proudctId:'',
     eachAmount:0,
     totalPrice:0
   };
@@ -63,6 +64,8 @@ export class Page_sellProductComponent implements OnInit {
     {"type" : "SET (สินค้าจัดชุด)"},
   ];
 
+  product_name:any[] = [];
+
   selectedType: string = '';
   searchInput:string='';
   telPhone:string='';
@@ -74,9 +77,16 @@ export class Page_sellProductComponent implements OnInit {
   visible : boolean = false;
   visible2 : boolean = false;
   display : boolean = false;
+  bill_display: boolean = false;
 
   itemsInBasket : number = 0;
   mpAmount:number=1;
+  totalPrice:number = 0;
+  totalAmount:number = 0;
+  payment_price:number;
+  check_input_amount:number = 0;
+
+  messages: Message[] | undefined;
 
   constructor(private productService : ProductService, 
     private customerService : CustomerService,
@@ -103,6 +113,7 @@ export class Page_sellProductComponent implements OnInit {
 
     if(bast){
       console.log("มีสินค้าในตะกร้าแล้ว");
+      this.messages = [{ severity: 'error', summary: 'Error', detail: 'มีสินค้าในตะกร้าแล้ว' }];
     }else{
       const selected = this.Products.find(p => p.pid == id);
       this.Basket[this.itemsInBasket] = selected;
@@ -114,31 +125,24 @@ export class Page_sellProductComponent implements OnInit {
     }
   }
 
-  // sell(){
-  //   console.log("สิ่งที่ซื้อ : ", this.Sale);
-  //   console.log("เบอร์โทรลูกค้า : ", this.telPhone);
-  //   this.checkTelPhone(this.telPhone);
-  //   console.log("ประเภทลูกค้า : ", this.customerType);
-  //   //console.log("ประเภทลูกค้า : ", this.checkTelPhone(this.telPhone));
-  // }
-
   async sell() {
     console.log("สิ่งที่ซื้อ : ", this.Sale);
     console.log("เบอร์โทรลูกค้า : ", this.telPhone);
     this.customerType = await this.checkTelPhone(this.telPhone);
     console.log("ประเภทลูกค้า : ", this.customerType);
 
-    let totalPrice = 0;
-    let totalAmount = 0;
+    this.totalPrice = 0;
+    this.totalAmount = 0;
 
     this.Sale.forEach(product =>{
-      totalPrice += product.price * product.amount;
-      totalAmount += product.amount;
+      this.totalPrice += product.price * product.amount;
+      this.totalAmount += product.amount;
     });
 
-    console.log("จำนวนสินค้าทั้งหมด : ", totalAmount);
-    console.log("ราคารวม : ", totalPrice);
-    this.salesRequest = await this.setSales(totalPrice, totalAmount);
+    if(this.payment_price > this.totalPrice){
+      console.log("จำนวนสินค้าทั้งหมด : ", this.totalAmount);
+    console.log("ราคารวม : ", this.totalPrice);
+    this.salesRequest = await this.setSales(this.totalPrice, this.totalAmount);
     this.salesRequest = await this.addSales(this.salesRequest);
     console.log("ขายแล้ววว : ", this.salesRequest);
 
@@ -146,28 +150,58 @@ export class Page_sellProductComponent implements OnInit {
     console.log("SALEID : ", this.salesRequest);
     this.SaleId = this.salesRequest.sid;
 
-    let i = 0;
+    this.addsaleDetail(this.SaleId);
 
+    let i = 0;
     this.Sale.forEach(product =>{
       console.log("I : ", i);
       console.log("PID : ", product.pid);
       console.log("SALEID : ", this.salesRequest.sid);
-      this.detailRequest.salesId = this.salesRequest.sid;
-      this.detailRequest.productId = product.pid;
+      this.detailRequest.saleId = this.salesRequest.sid;
+      this.detailRequest.proudctId = product.pid;
       this.detailRequest.eachAmount = product.amount;
       this.detailRequest.totalPrice = product.amount * product.price;
-      console.log("DETEIL : ", this.detailRequest);
-      this.addsaleDetail(this.detailRequest, this.salesRequest.sid, product.pid);
+      console.log("DETAIL : ", this.detailRequest);
+      // this.addsaleDetail(this.detailRequest, this.salesRequest.sid, product.pid);
+      this.detailService.addDetail(this.detailRequest).subscribe({
+      next: (detail) => {
+        console.log("รายละเอียดการขาย : ", detail);
+      }
+    });
       this.Basket[i].amount =  this.Basket[i].amount - product.amount;
       console.log("จำนวนสินค้าใหม่ : ", this.Basket[i]);
       this.updateProduct(this.Basket[i]);
       i++;
     });
 
+    this.visible2 = false;
+    this.showBill(this.customerType, this.telPhone);
+    }
+    
+  }
+
+  showBill(customerType:string, telPhone:string){
+    this.bill_display = true;
+    let i = 0;
+    this.Sale.forEach(product =>{
+      const bill_name = this.Products.find(p => p.pid == product.pid);
+      this.product_name[i] = bill_name.brand +' ' + bill_name.gen;
+      i++;
+    });
+  }
+
+  close_Bill(){
     this.Basket = [];
     this.Sale = [];
-    this.visible2 = false;
     this.ngOnInit();
+  }
+
+  setTotalAmount(){
+    this.totalPrice = 0;
+    for (let product of this.Sale) {
+      this.totalPrice += product.amount * product.price;
+    }
+    console.log("totalPrice : ", this.totalPrice);
   }
 
   async checkTelPhone(tel: string): Promise<string> {
@@ -210,18 +244,21 @@ export class Page_sellProductComponent implements OnInit {
     // });
   }
 
-  async addsaleDetail(detail:SalesDetail, saleId:string, productId:string){
+  async addsaleDetail(saleId:string){
     
     console.log("ไอดีการขาย : ", saleId);
-    console.log("ไอดีสินค้า : ", productId);
-    console.log("รายละเอียดสินค้า : ", detail);
+    // detail.salesId = saleId;
+    // detail.productId = productId;
+
+    // console.log("รายละเอียดสินค้า : ", detail);
     
-    this.detailService.addDetail(detail)
-    .subscribe({
-      next: (detail) => {
-        console.log("รายละเอียดการขาย : ", detail);
-      }
-    });
+    // this.detailService.addDetail(detail)
+    // .subscribe({
+    //   next: (detail) => {
+    //     console.log("รายละเอียดการขาย : ", detail);
+    //   }
+    // });
+    
   }
 
   updateProduct(product:Product){
@@ -304,6 +341,11 @@ export class Page_sellProductComponent implements OnInit {
     this.Basket.splice(index,1);
     this.Sale.splice(index,1);
     this.itemsInBasket--;
+
+    this.totalPrice = 0;
+    for (let product of this.Sale) {
+      this.totalPrice += product.amount * product.price;
+    }
   }
 
   // checkTelPhone(tel:string){

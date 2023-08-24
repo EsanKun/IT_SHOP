@@ -1,7 +1,7 @@
 <p-panel>
   <ng-template pTemplate="header">
-    <div class="flex">
-      <button pButton label="เพิ่มสินค้า" class="p-button-outlined" icon="pi pi-plus-circle"></button>
+    <button pButton label="เพิ่มสินค้า" class="p-button-outlined" icon="pi pi-plus-circle"></button>
+    <div class="flex" style="padding-left: 10px;">
       <span class="p-input-icon-left ml-auto">
         <i class="pi pi-search"></i>
         <input pInputText type="text" placeholder="Search keyword" #in_Search (click)="inputSearch(in_Search.value)" />
@@ -40,7 +40,7 @@
             <td><img src="{{product.image}}" alt="product.Pid" width="80" class="shadow-4" /></td>
             <td>
               <div>
-                <p-button (onClick)="addToMixProduct(product.pid)" styleClass="p-button-rounded">เพิ่ม</p-button>
+                <p-button (onClick)="addToMixProduct(product.pid)" styleClass="p-button-raised">เพิ่ม</p-button>
               </div>
             </td>
 
@@ -74,7 +74,7 @@
               <td>{{pro.amount}}</td>
               <td>
                 <div>
-                  <p-button (onClick)="deleteMixProduct(i, pro.pid)" styleClass="p-button-rounded">ลบ</p-button>
+                  <p-button (onClick)="deleteMixProduct(i, pro.pid)" styleClass="p-button-raised p-button-danger">ลบ</p-button>
                 </div>
               </td>
             </tr>
@@ -103,20 +103,12 @@
 
             <tr *ngIf="count_check_array >= 2">
               <td colspan="2" class="text-right"> </td>
-              <!-- <td>
-                  <button type="button" pButton pRipple (click)="showSuccess()" label="เพิ่ม" class="p-button-rounded">เพิ่ม</button>
-                </td> -->
               <td>ยืนยันการจัดชุด</td>
               <td>
-                <!-- <p-button (onClick)="addMixProduct()" styleClass="p-button-rounded">ยืนยัน</p-button> -->
-
                 <p-button (click)="showDialog()" icon="pi pi-external-link" label="เพิ่มข้อมูล"></p-button>
                 <p-dialog header="ข้อมูลชุดสินค้า" [(visible)]="visible" [style]="{width: '50vw'}">
-
                   <div class="container-column">
-
                     <div class="container-row">
-
                       <div>
                         <span class="p-input-icon-left">
                           <i class="pi pi-users"></i>

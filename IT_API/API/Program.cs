@@ -15,7 +15,7 @@ builder.Services.AddDbContext<FullStackDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddCors(options => options.AddPolicy(name: "CustomerOrigins",
+builder.Services.AddCors(options => options.AddPolicy(name: "Origins",
     policy =>
     {
         policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader();
@@ -36,7 +36,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("CustomerOrigins");
+app.UseCors("Origins");
 
 app.UseHttpsRedirection();
 

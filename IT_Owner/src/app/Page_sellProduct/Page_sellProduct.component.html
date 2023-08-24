@@ -13,25 +13,16 @@
       <p-dropdown [options]="product_type" name="type" [(ngModel)] = "selectedType" 
       optionValue="type" optionLabel="type" (onChange)="typeSelected()"></p-dropdown>
     </div>
+    <div class="shopping-notification">
+      <div class="shopping-cart-container">
+        <i class="pi pi-shopping-cart" style="position:relative; bottom:5px; right:25px; font-size: 2rem; color: rgb(0, 0, 0);"></i>
+        <div *ngIf=" Basket.length > 0 " class="notification">{{ Basket.length }}</div>
+      </div>
+    </div>
         <div class="btn_Go_Right">
-          <p-button label="ขายสินค้า" icon="pi pi-shopping-cart" styleClass="p-button-success" (onClick)="showBasket()"></p-button>
+          <p-button label="ขายสินค้า" icon="pi pi-shopping-cart" styleClass="p-button-raised p-button-success" (onClick)="showBasket()"></p-button>
         </div>
   </ng-template>
-
-  <!-- <div class="container">
-    <div class="row">
-      <ng-container *ngFor="let product of Products">
-        <div class="card col-md-3" (click)="showDetail(product.pid)">
-          <img src="{{product.image}}" alt="">
-          <h5>
-            {{product.brand}} : <h6>{{product.gen}}</h6>
-          </h5>
-          <button class="btn btn-outline-dark btn-block mt-4 w-100">เพิ่มลงตะกร้า</button>
-        </div>
-      </ng-container>
-      
-    </div>
-  </div> -->
 
   <div class="container">
     <div class="row">
@@ -39,11 +30,11 @@
         <div class="card col-md-3" (click)="showDetail(product.pid)">
           <img src="{{product.image}}" alt="">
           <div class="card-content">
-            <h5 class="text-desc">
+            <h5 class="text-desc" style="color: rgb(32, 113, 219);">
               {{product.brand}}
             </h5>
-            <p class="text-desc">{{product.type}}</p>
-            <p class="text-desc">{{product.gen}}</p>
+            <p class="text-desc" style="color: rgb(66, 32, 219);">{{product.type}}</p>
+            <p class="text-desc" style="color: rgb(32, 32, 32);">{{product.gen}}</p>
             <p><strong>ราคา: </strong> {{product.price}} บาท</p>
             <button class="btn btn-outline-dark btn-block mt-4" (click)="addToBasket(product.pid, $event)" type="button">เพิ่มลงตะกร้า</button>
             <!-- <p-button (onClick)="disapproval(product.id, product.pid, $event)" styleClass="p-button-rounded p-button-danger" 
@@ -91,8 +82,9 @@
           <tr>
             <th style="width:5%">รหัสสินค้า</th>
             <th>ราคา</th>
+            <th>จำนวนสินค้าสูงสุด</th>
             <th>จำนวนที่ซื้อ</th>
-            <th>จัดการ</th>
+            <th>Action</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-pro let-i="rowIndex">
@@ -101,31 +93,39 @@
             <td>{{pro.price}}</td>
             <td>
               <div class="column-input">
-                <span>จำนวนสินค้า (สูงสุด : {{pro.amount}} ชิ้น)</span>
-                <p-inputNumber [(ngModel)]="Sale[i].amount" mode="decimal" [showButtons]="true" inputId="minmax-buttons"
-                  [min]="1" [max]="pro.amount"> </p-inputNumber>
+                <span>สูงสุด : {{pro.amount}} ชิ้น</span>
               </div>
             </td>
-            <td>
+            <td><p-inputNumber [(ngModel)]="Sale[i].amount" mode="decimal" [showButtons]="true" inputId="minmax-buttons"
+              [min]="1" [max]="pro.amount" (onInput)="setTotalAmount()"> </p-inputNumber></td>
+              <td>
               <div>
-                <p-button (onClick)="deleteMixProduct(i, pro.pid)" styleClass="p-button-rounded">ลบ</p-button>
+                <p-button (onClick)="deleteMixProduct(i, pro.pid)" styleClass="p-button-danger">ลบ</p-button>
               </div>
             </td>
           </tr>
         </ng-template>
         <ng-template pTemplate="footer">
         
-          <div class="telPhone-input">
-            <span class="p-float-label">
-              <input pInputText id="telPhone" [(ngModel)]="telPhone" />
-              <label htmlFor="telPhone">เบอร์โทรลูกค้า</label>
-          </span>
+          <div class="telPhone-input" *ngIf=" Basket.length > 0 ">
+            <h4>ยอดรวม : {{ totalPrice }}</h4>
           </div>
 
-          <tr>
+          <tr *ngIf=" Basket.length > 0 ">
             <td colspan="2" class="text-right"> </td>
-            <td>ยืนยันการจัดชุด </td>
-            <td><button type="button" pButton pRipple (click)="sell()" label="เพิ่ม" class="p-button-rounded">เพิ่ม</button></td>
+            <td>
+              <span class="p-float-label">
+                <input pInputText id="payment_price" [(ngModel)]="payment_price" />
+                <label htmlFor="payment_price">เงินที่จ่าย</label>
+              </span>
+            </td>
+            <td>
+              <span class="p-float-label">
+                <input pInputText id="telPhone" [(ngModel)]="telPhone" />
+                <label htmlFor="telPhone">เบอร์โทรลูกค้า</label>
+              </span>
+            </td>
+            <td><button type="button" pButton pRipple (click)="sell()" label="ขายสินค้า" class="p-button-success"></button></td>
           </tr>
         </ng-template>
       </p-table>
@@ -133,3 +133,66 @@
     </div>
   </ng-template>
 </p-dialog>
+
+<p-dialog header="บิลหลังการขาย" [(visible)]="bill_display" [style]="{width: '50vw'}" (onHide)="close_Bill()">
+
+  <div class="column">
+    <div class="row" style="margin-top: 20px; margin-left: 5px;">
+      <h5>เบอร์โทรลูกค้า : {{ telPhone }}</h5>
+    </div>
+    <div class="row" style="margin: 5px;">
+      <h5>ประเภทลูกค้า : {{ customerType }}</h5>
+    </div>
+  </div>
+
+  <ng-template pTemplate>
+    <div class="col flex align-items-center justify-content-center">
+      <p-table [value]="Basket" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:40%">ชื่อสินค้าสินค้า</th>
+            <th style="width:20%">ราคาสินค้า</th>
+            <th style="width:20%">จำนวนที่ซื้อ</th>
+            <th style="width:20%">ราคารวม</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-pro let-i="rowIndex">
+          <tr>
+            <td>{{ product_name[i] }}</td>
+            <td>{{ pro.price }} บาท</td>
+            <td> {{ Sale[i].amount }} </td>
+            <td> {{ pro.price*Sale[i].amount }} บาท</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+
+          <tr>
+            <td colspan="2" class="text-right"> </td>
+            <td>{{ totalAmount }}</td>
+            <td>{{ totalPrice }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <div class="row" style="margin-top: 20px; margin-left: 5px;">
+        <h5>ยอดสุทธิ : {{totalAmount}} ชิ้น</h5>
+      </div>
+
+      <div class="row" style="margin-top: 10px; margin-left: 5px;">
+        <h5>เงินที่จ่าย : {{payment_price}} บาท</h5>
+      </div>
+
+      <div class="row" style="margin-top: 10px; margin-left: 5px;">
+        <h5>เงินทอน : {{ payment_price-totalPrice }} บาท</h5>
+      </div>
+
+      <button class="row" style="margin-top: 10px; margin-left: 5px;" type="button" pButton pRipple (click)="sell()" label="ปริ้น" class="p-button-success"></button>
+      
+    </div>
+  </ng-template>
+</p-dialog>
+
+
+
+
+<p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>

@@ -107,7 +107,7 @@ export class Page_onApproveComponent implements OnInit {
     {
       console.log(result);
       this.mixProducts = result;
-      this.mixProduct = result[1];
+      //this.mixProduct = result[1];
     }
     )
   }
@@ -166,9 +166,6 @@ export class Page_onApproveComponent implements OnInit {
       this.price_discount = result.price - (result.price * (result.discount/100));
       this.IdMP = result.id;
       this.store_PID = result.Pid;
-      //console.log("ID : ", this.IdMP);
-      //console.log("ID : ", result.Pid);
-      //console.log("ID : ", this.store_PID);
     }
     )
   }
@@ -180,12 +177,14 @@ export class Page_onApproveComponent implements OnInit {
 
   approval(id:string, event:any){
     event.stopPropagation();
-  // ตรวจสอบและดำเนินการอนุมัติสินค้าตาม productId
-    this.selectedMixProduct(id);
+    // ตรวจสอบและดำเนินการอนุมัติสินค้าตาม productId
+    const selected = this.mixProducts.find(p => p.id == id);
+    this.mixProduct = selected;
     //console.log('DATA : ', this.selectedMixProduct(id));
-    this.setProduct();
+    this.setProduct(this.mixProduct);
+    console.log("mixProduct : ", this.mixProduct);
     console.log("Approve Product : ", this.addProductRequest);
-    // this.IdMP = this.approveProduct.id;
+    this.IdMP = this.approveProduct.id;
     this.productService.addProduct(this.addProductRequest)
     .subscribe({
       next: (product) => {
@@ -198,14 +197,17 @@ export class Page_onApproveComponent implements OnInit {
   
   disapproval(id:string, pid:string,event:any){
     event.stopPropagation();
-    this.selectedMixProduct(id);
+    const selected = this.mixProducts.find(p => p.id == id);
+    this.mixProduct = selected;
     console.log("PRODUCT : ", this.mixProduct);
+    console.log("ID : ", this.mixProduct.id);
+    console.log("selectedproduct amount : ", this.mixProduct.amount);
     const pidArray: string[] = pid.split(",").map(x => x.trim());
 
     pidArray.forEach(element => {
       if(element != ''){
         console.log("ELEMENT : ", element);
-        this.updateProductAmount(element);
+        this.updateProductAmount(element, this.mixProduct.amount);
       }else{
         console.log("ELEMENT IS NULL ");
       }
@@ -213,7 +215,7 @@ export class Page_onApproveComponent implements OnInit {
     this.updateApprovement('ไม่อนุมัติ');
   }
 
-  setProduct(){
+  setProduct(new_product:any){
     this.addProductRequest.brand = this.mixProduct.brand;
     this.addProductRequest.gen = this.mixProduct.gen;
     this.addProductRequest.type = this.mixProduct.type;
@@ -225,16 +227,13 @@ export class Page_onApproveComponent implements OnInit {
     this.IdMP = this.approveProduct.id;
   }
 
-  updateProductAmount(Pid:string){
+  updateProductAmount(Pid:string, amount:number){
     console.log('UPDATE AMOUNT : ', Pid);
     this.productService.getProduct(Pid)
     .subscribe(( result : Product) =>
     {
       this.updateProductRequest = result;
-      console.log("ProductRequest : ",this.updateProductRequest);
-      //this.updateProductRequest.amount = this.updateProductRequest.amount+this.mixProduct.amount;
-      console.log("Product Request AMOUNT: ",this.updateProductRequest.amount);
-      //this.products = result;
+      this.updateProductRequest.amount += amount;
       this.updateProduct();
     });
   }

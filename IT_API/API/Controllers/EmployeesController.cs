@@ -14,9 +14,12 @@ namespace API.Controllers
     public class EmployeesController : Controller
     {
         private readonly FullStackDbContext _fullstackDbContext;
-        public EmployeesController(FullStackDbContext fullStackDbContext) 
+        private readonly IConfiguration _configuration;
+        private static Employee emp = new Employee();
+        public EmployeesController(FullStackDbContext fullStackDbContext, IConfiguration configuration) 
         { 
             _fullstackDbContext = fullStackDbContext;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -43,11 +46,52 @@ namespace API.Controllers
 
             var employee = await _fullstackDbContext.Employees
                 .FirstOrDefaultAsync(x => x.userName == employeeObj.userName && x.password == employeeObj.password);
-            if(employee == null) 
-                return NotFound(new {Message = "Employee Not Found!"});
+            if (employee == null)
+                return NotFound(new { Message = "Employee Not Found!" });
 
             return Ok(employee);
 
+            //if(employeeObj == null)
+            //{
+            //    return BadRequest();
+            //}
+
+            //if(!BCrypt.Net.BCrypt.Verify(employeeObj.password, emp.password))
+            //{
+            //    return BadRequest("Wrong Password");
+            //}
+            //var employee = await _fullstackDbContext.Employees
+            //        .FirstOrDefaultAsync(x => x.userName == employeeObj.userName && x.password == employeeObj.password);
+
+            //string _token = CreateToken(employee);
+
+            //employee.token = _token;
+
+            //return Ok(employee);
+
+        }
+
+        private string CreateToken(Employee employee)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, employee.userName)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                _configuration.GetSection("AppSettings:Token").Value!));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: creds
+                );
+
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return jwt;
         }
 
         private string CreateJwt(Employee employee)
@@ -74,6 +118,10 @@ namespace API.Controllers
         public async Task <IActionResult> AddEmployee([FromBody] Employee employeeRequest)
         {
             employeeRequest.Eid = Guid.NewGuid();
+
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(employeeRequest.password);
+
+            employeeRequest.password = passwordHash;
 
             // เพิ่มข้อมูลที่ส่งเข้ามาลงไปใน Table แต่ยังไม่ได้อัปเดตในดาต้าเบส
             await _fullstackDbContext.Employees.AddAsync(employeeRequest);

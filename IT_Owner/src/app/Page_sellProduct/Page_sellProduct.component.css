@@ -1,3 +1,13 @@
+ .row{
+  display: flex;
+  flex-direction: row;
+ }
+
+ .column{
+  display: flex;
+  flex-direction: column;
+ }
+
 .centerScreen {
     position: absolute;
     top: 2%;
@@ -35,10 +45,16 @@
     right: 10%;
   }
 
-  :host>>>.btn_Go_Right {
+  .btn_Go_Right {
     position: absolute;
     right: 5%;
     size: 50%;
+  }
+
+  .shopping-notification{
+    position: absolute;
+    right: 13%;
+    top: 6rem;
   }
 
   .container {
@@ -139,6 +155,36 @@
     padding: 10px;
     
   }
+
+  .notification {
+    background-color: red;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    color: wheat;
+    text-align: center;
+    padding-top: 0.3em;
+    padding-right: 0.1em;
+    position: absolute;
+    top: -1.0em;
+    left: -0.2em;
+}
+
+.shopping-cart-container {
+  position: relative;
+}
+
+::ng-deep ng-template .p-panel.p-panel-header>tr>th{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+}
+
+::ng-deep ng-template .p-panel-header.ng-tns-c4224635246-0.ng-star-inserted{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+}
   
   
 

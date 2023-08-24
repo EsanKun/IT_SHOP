@@ -91,55 +91,47 @@ export class Add_MixproductComponent implements OnInit {
 
   }
 
-  // addToMixProduct(Pid : string){
-
-  //   this.productService.getProduct(Pid)
-  //   .subscribe(( result : Product) =>
-  //   {
-  //     console.log("RESULT : ",result);
-  //     if(result.type == "SET (สินค้าจัดชุด)"){
-  //       console.log("สินค้ารวมชุดไม่สามารถจัดรวมชุดซ้ำได้");
-  //       this.messages1 = [{severity:'error', summary: 'Heading', detail:'สินค้ารวมชุดไม่สามารถจัดรวมชุดซ้ำได้'}];
-  //     }else{
-  //       if(this.count_check_array<2){
-
-  //         // เพิ่มสินค้าลงในอาเรย์ ให้ใส่ได้มาสุดสองช่อง
-  //         this.store_mixProduct[this.count_check_array] = result;
-  //         this.count_check_array++;
-  
-  //         // หาจำนวนที่น้อยที่สุดของสินค้าแล้วกำหนดให้เป็นค่าที่มากที่สุดที่สามารถจัดชุดสินค้าได้
-  //         if(this.count_check_array == 1) this.maxAmount = result.amount;
-  //         if(result.amount < this.maxAmount) this.maxAmount = result.amount;
-  //       }
-  //     }
-  //     //this.products = result;
-  //   }
-  //   )
-  // }
-
   addToMixProduct(Pid : string){
-    this.productService.getProduct(Pid)
-    .subscribe(( result : Product) =>
-    {
-      console.log("RESULT : ",result);
-      if(result.type == "SET (สินค้าจัดชุด)"){
-        console.log("สินค้ารวมชุดไม่สามารถจัดรวมชุดซ้ำได้");
-        this.messages1 = [{severity:'error', summary: 'Heading', detail:'สินค้ารวมชุดไม่สามารถจัดรวมชุดซ้ำได้'}];
-      }
-      else{
-        // เก็บข้อมูลของสินค้าไว้ใน array ANY store_mixProduct
-        this.store_mixProduct[this.count_check_array] = result;
-        this.store_PID += result.pid + ',';
+
+    const check_StoreProduct = this.store_mixProduct.find(p => p.pid == Pid);
+
+    if(check_StoreProduct){
+      console.log("มีสินค้าในตะกร้าแล้ว");
+    }else{
+      const selected = this.products.find(p => p.pid == Pid);
+        this.store_mixProduct[this.count_check_array] = selected;
+        console.log(this.store_mixProduct[this.count_check_array]);
+        this.store_PID += selected.pid + ',';
         this.count_check_array++;
-        this.totalPrice += result.price;
+        this.totalPrice += selected.price;
         // หาค่าที่น้อยที่สุด
         this.maxAmount = Math.min.apply(null, this.store_mixProduct.map(mp => mp.amount));
         console.log("STORE PID : " +this.store_PID);
         this.showPID();
-      }
-      //this.products = result;
     }
-    )
+
+    // this.productService.getProduct(Pid)
+    // .subscribe(( result : Product) =>
+    // {
+    //   console.log("RESULT : ",result);
+    //   if(result.type == "SET (สินค้าจัดชุด)"){
+    //     console.log("สินค้ารวมชุดไม่สามารถจัดรวมชุดซ้ำได้");
+    //     this.messages1 = [{severity:'error', summary: 'Heading', detail:'สินค้ารวมชุดไม่สามารถจัดรวมชุดซ้ำได้'}];
+    //   }
+    //   else{
+    //     // เก็บข้อมูลของสินค้าไว้ใน array ANY store_mixProduct
+    //     this.store_mixProduct[this.count_check_array] = result;
+    //     this.store_PID += result.pid + ',';
+    //     this.count_check_array++;
+    //     this.totalPrice += result.price;
+    //     // หาค่าที่น้อยที่สุด
+    //     this.maxAmount = Math.min.apply(null, this.store_mixProduct.map(mp => mp.amount));
+    //     console.log("STORE PID : " +this.store_PID);
+    //     this.showPID();
+    //   }
+    //   //this.products = result;
+    // });
+
   }
 
   showPID(){
@@ -228,7 +220,7 @@ export class Add_MixproductComponent implements OnInit {
     .subscribe({
       next: (approve) => {
         console.log(approve);
-        this.router.navigate(['mixProduct']);
+        //this.router.navigate(['mixProduct']);
         this.store_mixProduct = [];
         this.count_check_array = 0;
         this.visible = false;

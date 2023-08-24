@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "DViAjWKmDfM6tTOhI46n8aGXRCX/zBi05GNc82SsRVR8SItkVJg45a8cX0hZ3uZHwFI7trph5/I7O6RQvy0mBw==",
+  "dgSpecHash": "02lNPM4cUIAMjdhQsBS5vaRJ2kbuXlvsgQRTqmSft7bHKdG87nFAv+THFSy/+VIPXyygNTqK29Y+PoTJbYjhQQ==",
   "success": true,
-  "projectFilePath": "D:\\Angular\\IT_API\\IT_API\\IT_API.csproj",
+  "projectFilePath": "D:\\Angular\\ITOne_Exercise\\IT_API\\IT_API\\IT_API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\DELL\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Angular\\IT_API\\API\\API.csproj": {}
+    "D:\\Angular\\ITOne_Exercise\\IT_API\\API\\API.csproj": {}
   },
   "projects": {
-    "D:\\Angular\\IT_API\\API\\API.csproj": {
+    "D:\\Angular\\ITOne_Exercise\\IT_API\\API\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Angular\\IT_API\\API\\API.csproj",
+        "projectUniqueName": "D:\\Angular\\ITOne_Exercise\\IT_API\\API\\API.csproj",
         "projectName": "API",
-        "projectPath": "D:\\Angular\\IT_API\\API\\API.csproj",
+        "projectPath": "D:\\Angular\\ITOne_Exercise\\IT_API\\API\\API.csproj",
         "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-        "outputPath": "D:\\Angular\\IT_API\\API\\obj\\",
+        "outputPath": "D:\\Angular\\ITOne_Exercise\\IT_API\\API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -41,6 +41,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[7.0.8, )"
@@ -60,6 +64,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.8, )"
+            },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[6.32.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

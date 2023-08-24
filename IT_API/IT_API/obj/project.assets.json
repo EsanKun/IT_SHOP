@@ -229,11 +229,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Angular\\IT_API\\IT_API\\IT_API.csproj",
+      "projectUniqueName": "D:\\Angular\\ITOne_Exercise\\IT_API\\IT_API\\IT_API.csproj",
       "projectName": "IT_API",
-      "projectPath": "D:\\Angular\\IT_API\\IT_API\\IT_API.csproj",
+      "projectPath": "D:\\Angular\\ITOne_Exercise\\IT_API\\IT_API\\IT_API.csproj",
       "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-      "outputPath": "D:\\Angular\\IT_API\\IT_API\\obj\\",
+      "outputPath": "D:\\Angular\\ITOne_Exercise\\IT_API\\IT_API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",

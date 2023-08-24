@@ -18,6 +18,23 @@ export class Page_CustomerComponent implements OnInit {
   @Output() onInput = new EventEmitter<string>();
   @Output() onSearch = this.onInput.pipe(auditTime(400));
 
+  addCustomerRequest: Customer = {
+    cid: '',
+    name: '',
+    telPhone: '',
+    email: ''
+  };
+
+  editCustomerRequest: Customer = {
+    cid: '', 
+    name: '',
+    telPhone: '', 
+    email: ''  
+  };
+
+  addCustomer_display:boolean = false;
+  editCustomer_display:boolean = false;
+
   constructor(private customerService : CustomerService,
     private router:Router) { }
 
@@ -58,6 +75,42 @@ export class Page_CustomerComponent implements OnInit {
     }
   }
 
+  show_addCustomer_Display(){
+    this.addCustomer_display = true;
+  }
+
+  show_editCustomer_Display(id:string){
+    this.editCustomer_display = true;
+    const info = this.customers.find(customer => customer.cid == id);
+    this.editCustomerRequest = info;
+  }
+
+  addCustomer(){
+    this.customerService.addCustomer(this.addCustomerRequest)
+    .subscribe({
+      next: (customer) => {
+        console.log(customer);
+        // this.router.navigate(['customer']);
+        this.addCustomer_display = false;
+        this.ngOnInit();
+      }
+    });
+    console.log(this.addCustomerRequest);
+  }
+
+  updateCustomer(){
+    console.log("EID : ", this.editCustomerRequest.cid);
+    this.customerService.updateCustomer(this.editCustomerRequest.cid, this.editCustomerRequest)
+    .subscribe({
+      next : (response) => {
+        console.log("Update Success");
+        // this.router.navigate(['customer']);
+        this.editCustomer_display = false;
+        this.ngOnInit();
+      }
+    });
+  }
+
   deleteCustomer(id:string){
     console.log("DELETE FROM ID : ",id);
     this.customerService.deleteCustomer(id)
@@ -67,5 +120,7 @@ export class Page_CustomerComponent implements OnInit {
       }
     });
   }
+
+
 
 }

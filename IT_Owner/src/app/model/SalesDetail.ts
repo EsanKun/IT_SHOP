@@ -1,7 +1,7 @@
 export interface SalesDetail{
     sDid:string;
-    salesId:string;
-    productId:string;
+    saleId:string;
+    proudctId:string;
     eachAmount:number;
     totalPrice:number;
 }

@@ -2,8 +2,14 @@
 <p-panel>
   <ng-template pTemplate="header">
     <div class="flex">
-      <button pButton label="เพิ่มสินค้า" class="p-button-outlined" icon="pi pi-plus-circle"></button>
+      <button pButton class="p-button-raised" icon="pi pi-plus-circle">
+        <a routerLink="add">เพิ่มสินค้า</a>
+    </button>
+    </div>
+    <div style="padding-left: 10px;">
       <p-dropdown [options]="set_status" name="status" [(ngModel)] = "selectedStatus" optionValue="status" optionLabel="status" (onChange)="statusSelected()"></p-dropdown>
+    </div>
+    <div style="padding-left: 10px;">
       <span class="p-input-icon-left ml-auto">
         <i class="pi pi-search"></i>
         <input pInputText type="text" placeholder="Search keyword" 
@@ -37,7 +43,7 @@
           <th pSortableColumn="category" style="width:5%">ส่วนลด <p-sortIcon field="category"></p-sortIcon></th>
           <th pSortableColumn="category" style="width:5%">สถานะ <p-sortIcon field="category"></p-sortIcon></th>
           <th style="width:10%">รูปภาพ</th>
-          <th style="width:20%">Action</th>
+          <th style="width:20%" *ngIf="this.selectedStatus == 'รอการอนุมัติ'">Action</th>
       </tr>
   </ng-template>
   <ng-template pTemplate="body" let-product let-i ="rowIndex" >
@@ -53,9 +59,9 @@
           <td><img src="{{product.image}}" alt="product.Pid" width="100" class="shadow-4" /></td>
           <td *ngIf="product.status == 'รอการอนุมัติ'">
             <div>
-              <p-button (onClick)="approval(product.id, $event)" styleClass="p-button-rounded p-button-success" 
+              <p-button (onClick)="approval(product.id, $event)" styleClass="p-button-success" 
               icon="pi pi-thumbs-up-fill" label="อนุมัติ"></p-button>
-              <p-button (onClick)="disapproval(product.id, product.pid, $event)" styleClass="p-button-rounded p-button-danger" 
+              <p-button (onClick)="disapproval(product.id, product.pid, $event)" styleClass="p-button-danger" 
               icon="pi pi-times" label="ไม่อนุมัติ"></p-button>
             </div>
           </td>

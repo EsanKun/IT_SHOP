@@ -35,6 +35,8 @@ export class Add_ProductComponent implements OnInit {
 
   selectedType :string = '';
 
+  
+
   constructor(private productSerevice : ProductService, private router : Router) { }
 
   ngOnInit() {

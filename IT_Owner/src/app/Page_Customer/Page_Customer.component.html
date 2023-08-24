@@ -10,9 +10,10 @@
             </span>
         </span>
         <div class="btn_Go_Right">
-            <button pButton class="p-button-outlined" icon="pi pi-plus-circle">
+            <!-- <button pButton class="p-button-outlined" icon="pi pi-plus-circle">
                 <a routerLink="add">เพิ่มลูกค้า</a>
-            </button>
+            </button> -->
+            <p-button label="เพิ่มลูกค้า" icon="pi pi-plus-circle" styleClass="p-button-raised p-button-success" (onClick)="show_addCustomer_Display()"></p-button>
         </div>
     </ng-template>
   
@@ -45,10 +46,9 @@
           <td>{{customer.email}}</td>
           <td>
             <div>
-                <p-button styleClass="p-button-rounded" (onClick)="edit(customer.cid)">
-                    แก้ไข
-                </p-button>
-                <p-button (onClick)="deleteCustomer(customer.cid)" styleClass="p-button-rounded">ลบ</p-button>
+                <!-- <p-button styleClass="p-button-raised p-button-info" (onClick)="edit(customer.cid)"> show_editCustomer_Display() -->
+                <p-button label="แก้ไข" styleClass="p-button-raised p-button-info" (onClick)="show_editCustomer_Display(customer.cid)"></p-button>
+                <p-button label="ลบ" (onClick)="deleteCustomer(customer.cid)" styleClass="p-button-raised p-button-danger"></p-button>
             </div>
           </td>
 
@@ -64,3 +64,64 @@
 
   <ng-template pTemplate="footer"> Footer content here </ng-template>
 </p-panel>
+
+<p-dialog header="เพิ่มลูกค้า" [(visible)]="addCustomer_display" [style]="{width: '50vw'}">
+
+    <div class="container my-5">
+        
+        <form #form="ngForm" (ngSubmit)="addCustomer()">
+      
+          <div class="form-group">
+            <label for="name">ชื่อ-นามสกุลลูกค้า</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="ชื่อ-นามสกุล" [(ngModel)] = "addCustomerRequest.name">
+          </div>
+      
+          <div class="form-group">
+            <label for="telPhone">เบอร์โทรศัพท์</label>
+            <input type="text" class="form-control" id="telPhone" name="telPhone" [(ngModel)] = "addCustomerRequest.telPhone">
+          </div>
+      
+          <div class="form-group">
+            <label for="email1">อีเมล</label>
+            <input type="text" class="form-control" id="email1" name="email" [(ngModel)] = "addCustomerRequest.email">
+          </div>
+          <br>
+          <button  type="submit" class="btn btn-primary">บันทึก</button>
+        </form>
+      
+      </div>
+    
+  </p-dialog>
+
+  <p-dialog header="เแก้ไขข้อมูลลูกค้า" [(visible)]="editCustomer_display" [style]="{width: '50vw'}">
+
+    <div class="container my-5">
+        
+        <form #form="ngForm" (ngSubmit)="updateCustomer()">
+      
+          <div class="form-group">
+            <label for="cid">รหัสลูกค้า</label>
+            <input readonly type="text" class="form-control" id="cid" name="cid" [(ngModel)] = "editCustomerRequest.cid">
+          </div>
+      
+          <div class="form-group">
+            <label for="name">ชื่อ-นามสกุลลูกค้า</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="ชื่อ-นามสกุล" [(ngModel)] = "editCustomerRequest.name">
+          </div>
+      
+          <div class="form-group">
+            <label for="telphone">เบอร์โทรศัพท์</label>
+            <input type="text" class="form-control" id="telPhone" name="telPhone" [(ngModel)] = "editCustomerRequest.telPhone">
+          </div>
+      
+          <div class="form-group">
+            <label for="email1">อีเมล</label>
+            <input type="text" class="form-control" id="email1" name="email" [(ngModel)] = "editCustomerRequest.email">
+          </div>
+          <br>
+          <button  type="submit" class="btn btn-primary">บันทึก</button>
+        </form>
+      
+      </div>
+    
+  </p-dialog>
